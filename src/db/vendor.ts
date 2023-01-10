@@ -1,11 +1,6 @@
 import { db } from "../firebase";
 import collections from "./collections";
-
-
-import { collection, addDoc, getDocs } from "firebase/firestore";
-import firebase from "firebase/compat";
-import FirestoreDataConverter = firebase.firestore.FirestoreDataConverter;
-import DocumentData = firebase.firestore.DocumentData;
+import { collection, addDoc, getDocs, FirestoreDataConverter, DocumentData } from "firebase/firestore";
 
 type Vendor = {
     name: string
@@ -49,3 +44,5 @@ const vendorConverter: FirestoreDataConverter<Vendor> = {
         } as Vendor
     }
 }
+
+export { addVendor, getVendor }
