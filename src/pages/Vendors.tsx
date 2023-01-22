@@ -24,7 +24,7 @@ export default function AppTest()  {
   const [current, setCurrent] = useState('view');
   const location = useLocation();
   console.log(location);
-  const onClick: MenuProps['onClick'] = (e) => {
+  const onClick: MenuProps['onClick'] = (e: any) => {
     console.log('click ', e);
     setCurrent(e.key);
   };
