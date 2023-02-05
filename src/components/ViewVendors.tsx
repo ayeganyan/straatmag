@@ -12,7 +12,6 @@ function ViewVendors() {
     let handleClick = async () => {
         let result = await addVendor({
             name: 'string',
-            lastName: 'string',
             rfid: 'string',
             email: 'test@gmail.com'
         })
