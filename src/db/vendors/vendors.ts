@@ -1,5 +1,5 @@
-import { db } from "../firebase";
-import collections from "./collections";
+import { db } from "../../firebase";
+import collections from "../collections";
 import {
     collection,
     addDoc,
@@ -10,27 +10,17 @@ import {
     doc,
     query,
     where,
-    QueryDocumentSnapshot
 } from "firebase/firestore";
 import { v4 as uuidv4 } from 'uuid';
+import {RFID, Vendor, VendorUUID} from "./types";
 
-type VendorUUID = string
 
-type RFID = string
-
-type Vendor = {
-    uuid?: VendorUUID // Unique, non-null
-    name: string // non-null
-    rfid: RFID // Unique, non-null
-    email: string // optional
-}
-
-const vendorsRef = collection(db, collections.VENDOR)
+const vendorsRef = collection(db, collections.VENDORS)
 
 async function addVendor(vendor: Vendor): Promise<VendorUUID> {
     const vendorId = uuidv4()
     await addDoc(
-        collection(db, collections.VENDOR)
+        collection(db, collections.VENDORS)
             .withConverter<Vendor>(vendorConverter),
         {
             ...vendor,
@@ -39,16 +29,8 @@ async function addVendor(vendor: Vendor): Promise<VendorUUID> {
     return vendorId
 }
 
-async function getVendor(vendorId: VendorUUID): Promise<Vendor> {
-    const vendorDoc = await getVendorDocById(vendorId);
-    if (!vendorDoc) {
-        return Promise.reject(`Vendor with id ${vendorId} does not exist`)
-    }
-    return vendorDoc.data()
-}
-
 async  function updateVendor(uuid: VendorUUID, vendor: Vendor): Promise<void> {
-    const oldVendorDoc = await getVendorDocById(uuid)
+    const oldVendorDoc = await getVendorById(uuid)
     if (!oldVendorDoc) {
         return Promise.reject(`Vendor with id ${uuid} does not exist`)
     }
@@ -56,31 +38,33 @@ async  function updateVendor(uuid: VendorUUID, vendor: Vendor): Promise<void> {
     await updateDoc(docRef, {...vendor})
 }
 
-async function getVendorDocById(vendorId: VendorUUID): Promise<QueryDocumentSnapshot<Vendor>> {
+async function getVendorById(vendorId: VendorUUID): Promise<Vendor> {
     const queryVendorById = query(vendorsRef, where("id", "==", vendorId))
         .withConverter(vendorConverter)
 
     const vendorsSnapshot = await getDocs(queryVendorById)
     const doc = vendorsSnapshot.docs.at(0)
 
-    return doc ? doc : Promise.reject(`Vendor with id ${vendorId} does not exist`)
+    return doc ? doc.data() : Promise.reject(`Vendor with id "${vendorId}" does not exist`)
 }
 
-async function getVendorDocByRFID(rfId: RFID): Promise<QueryDocumentSnapshot<Vendor> | undefined> {
+async function getVendorByRFID(rfId: RFID): Promise<Vendor> {
     const queryVendorById = query(vendorsRef, where("rfid", "==", rfId))
         .withConverter(vendorConverter)
 
-    const vendorsSnapshot = await getDocs(queryVendorById)
-    return vendorsSnapshot.docs.at(0)
+    const vendorsSnapshots = await getDocs(queryVendorById)
+    const vendorSnapshot = vendorsSnapshots.docs.at(0)
+    return vendorSnapshot ? vendorSnapshot.data() : Promise.reject(`Vendor with rfid "${rfId}" does not exist`)
 }
 
 // Exact match for the name is not the option, will figure it out
-async function getVendorDocByName(name: string): Promise<QueryDocumentSnapshot<Vendor> | undefined> {
+async function getVendorByName(name: string): Promise<Vendor> {
     const queryVendorById = query(vendorsRef, where("name", "==", name))
         .withConverter(vendorConverter)
 
-    const vendorsSnapshot = await getDocs(queryVendorById)
-    return vendorsSnapshot.docs.at(0)
+    const vendorsSnapshots = await getDocs(queryVendorById)
+    const vendorsSnapshot = vendorsSnapshots.docs.at(0)
+    return vendorsSnapshot ? vendorsSnapshot.data() : Promise.reject(`Vendor with name "${name}' does not exist`)
 }
 
 // converters
@@ -105,4 +89,9 @@ const vendorConverter: FirestoreDataConverter<Vendor> = {
     }
 }
 
-export { addVendor, getVendor }
+export {
+    addVendor,
+    getVendorById,
+    getVendorByName,
+    getVendorByRFID
+}
