@@ -17,8 +17,20 @@ import {RFID, Vendor, VendorUUID} from "./types";
 
 const vendorsRef = collection(db, collections.VENDORS)
 
-async function addVendor(vendor: Vendor): Promise<VendorUUID> {
+async function existsByRFID(rfid: RFID) {
+    try {
+        await getVendorByRFID(rfid)
+        return true
+    } catch (err) {
+        return false
+    }
+}
+
+async function addVendor(vendor: Vendor): Promise<Vendor> {
     const vendorId = uuidv4()
+    if (await existsByRFID(vendor.rfid)) {
+        throw new Error(`Vendor with rfid ${vendor.rfid} already exists`)
+    }
     await addDoc(
         collection(db, collections.VENDORS)
             .withConverter<Vendor>(vendorConverter),
@@ -26,7 +38,8 @@ async function addVendor(vendor: Vendor): Promise<VendorUUID> {
             ...vendor,
             uuid: vendorId
         })
-    return vendorId
+
+    return await getVendorById(vendorId)
 }
 
 async  function updateVendor(uuid: VendorUUID, vendor: Vendor): Promise<void> {
@@ -39,17 +52,17 @@ async  function updateVendor(uuid: VendorUUID, vendor: Vendor): Promise<void> {
 }
 
 async function getVendorById(vendorId: VendorUUID): Promise<Vendor> {
-    const queryVendorById = query(vendorsRef, where("id", "==", vendorId))
+    const queryVendorById = query(vendorsRef, where("uuid", "==", vendorId))
         .withConverter(vendorConverter)
 
     const vendorsSnapshot = await getDocs(queryVendorById)
     const doc = vendorsSnapshot.docs.at(0)
 
-    return doc ? doc.data() : Promise.reject(`Vendor with id "${vendorId}" does not exist`)
+    return doc ? doc.data() : Promise.reject(`Vendor with uuid "${vendorId}" does not exist`)
 }
 
 async function getVendorByRFID(rfId: RFID): Promise<Vendor> {
-    const queryVendorById = query(vendorsRef, where("rfid", "==", rfId))
+    const queryVendorById = query(vendorsRef, where("RFID", "==", rfId))
         .withConverter(vendorConverter)
 
     const vendorsSnapshots = await getDocs(queryVendorById)
@@ -89,9 +102,11 @@ const vendorConverter: FirestoreDataConverter<Vendor> = {
     }
 }
 
-export {
+const vendors = {
     addVendor,
     getVendorById,
     getVendorByName,
     getVendorByRFID
 }
+
+export default vendors
