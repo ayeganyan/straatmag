@@ -1,8 +1,11 @@
 
-const VENDOR = "vendor"
-const VOLUNTEER = "volunteer"
+const VENDORS = "vendors"
+const VOLUNTEERS = "volunteers"
+const RECORDS = "records"
 
-export default {
-    VENDOR,
-    VOLUNTEER
+const collections = {
+    VENDORS,
+    VOLUNTEERS,
+    RECORDS
 }
+export default collections

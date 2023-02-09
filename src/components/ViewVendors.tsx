@@ -4,19 +4,19 @@ import 'antd/dist/reset.css';
 import { Space, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Typography } from 'antd';
-import { addVendor, getVendor } from '../db/vendor'
+import vendors from '../db/vendors/vendors'
 
 const { Title } = Typography;
 
 function ViewVendors() {
     let handleClick = async () => {
-        let result = await addVendor({
+        let result = await vendors.addVendor({
             name: 'string',
             rfid: 'string',
             email: 'test@gmail.com'
         })
         console.log(result)
-        let r2 = await getVendor("")
+        let r2 = await vendors.getVendorById("")
         console.log(r2)
     }
     return (
