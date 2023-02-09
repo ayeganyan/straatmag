@@ -1,37 +1,63 @@
 import Layout, { Content, Header } from 'antd/es/layout/layout';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/reset.css';
-import { Space, Table, Tag } from 'antd';
+import { Button, Col, Row, Space, Spin, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Typography } from 'antd';
-import vendors from '../db/vendors/vendors'
+import { addVendor, getAllVendors, getVendor, Vendor } from '../db/vendor'
+import { Input } from 'antd';
+import { UserAddOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Link, Outlet, Route, Routes, useNavigate } from 'react-router-dom';
+import CreateVendor from './CreateVendorForm';
+
+const { Search } = Input;
 
 const { Title } = Typography;
 
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
+
+
 function ViewVendors() {
-    let handleClick = async () => {
-        let result = await vendors.addVendor({
-            name: 'string',
-            rfid: 'string',
-            email: 'test@gmail.com'
-        })
-        console.log(result)
-        let r2 = await vendors.getVendorById("")
-        console.log(r2)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [vendorList, setVendorList] = useState<Array<Vendor>>([])
+
+    useEffect(() => {
+        (async () => {
+            setLoading(true)
+            let allVendors = await getAllVendors()
+            setVendorList(allVendors)
+            setLoading(false)
+            console.log('load complete')
+        })()
+    }, [])
+
+    let getAllVendor = async () => {
+        let result = await getAllVendors();
+        console.log(result);
     }
     return (
         <div className="viewVendor">
+            <Spin indicator={antIcon} spinning={loading}>
 
-            <div >
-                {/* <Title level={3}>View Vendors</Title> */}
-                <ViewVendorsTable />
-                <button onClick={() => handleClick()} >test</button>
-            </div>
+                <div >
+                    {/* <Title level={3}>View Vendors</Title> */}
+                    
+                    <ViewVendorsTable 
+                    //@ts-ignore
+                    vendors={vendorList} />
+                    {/* <button onClick={() => getAllVendor()} >test</button> */}
+                </div>
+            </Spin>
+            {/* <Outlet/> */}
+
+
         </div>
     )
 }
 
 interface DataType {
+    uuid: any;
     key: string
     name: string
     lastName: string
@@ -45,83 +71,52 @@ const columns: ColumnsType<DataType> = [
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        render: (text) => <a>{text}</a>,
+        render: (text, record) => <Link to={`/vendors/edit/${record.uuid}`}>{record.name} {record.lastName}</Link>,
     },
     {
-        title: 'Last Name',
-        dataIndex: 'lastName',
-        key: 'lastName',
-    },
-    {
-        title: 'email',
+        title: 'Email',
         dataIndex: 'email',
         key: 'email',
     },
     {
-        title: 'Tags',
-        key: 'tags',
-        dataIndex: 'tags',
-        render: (_, { tags }) => (
-            <>
-                {tags.map((tag) => {
-                    let color = tag.length > 5 ? 'geekblue' : 'green';
-                    if (tag === 'Inactive') {
-                        color = 'volcano';
-                    }
-                    return (
-                        <Tag color={color} key={tag}>
-
-                            {
-                                tag.toUpperCase()
-                            }
-                        </Tag>
-                    );
-                })}
-            </>
-        ),
+        title: 'rfid',
+        dataIndex: 'rfid',
+        key: 'rfid',
     },
     {
-        title: 'Action',
-        key: 'action',
-        render: (_: any, record: { name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; }) => (
-            <Space size="middle">
-                <a>Edit</a>
-                <a>Delete</a>
-            </Space>
-        ),
-    },
+        title: 'uuid',
+        dataIndex: 'uuid',
+        key: 'uuid',
+    }
 ];
 
-const data: DataType[] = [
-    {
-        key: '1',
-        name: 'John',
-        lastName: 'Brown',
-        rfid: '21',
-        email: 'john.brown@gmail.com',
-        tags: ['Active'],
-    },
-    {
-        key: '2',
-        name: 'Jim',
-        lastName: 'Green',
-        rfid: '42',
-        email: 'jim.green@gmail.com',
-        tags: ['Active'],
-    },
-    {
-        key: '3',
-        name: 'Joe',
-        lastName: 'Black',
-        rfid: '32',
-        email: 'jow.black@gmail.com',
-        tags: ['Inactive'],
-    },
-];
 
-function ViewVendorsTable() {
+function ViewVendorsTable(props: { vendors: readonly DataType[] | undefined; }) {
+    const navigate = useNavigate();
+
     return (
-        <Table columns={columns} dataSource={data} />
+        <div className='vendor-list-table-container'>
+            <Row className='vendor-list-table-action-panel'>
+                <Col span={8}/>
+                <Col span={8} />
+                <Col span={8} className='vendor-btns-container' >
+                    {/* <Search
+                        placeholder="input search text"
+                        allowClear
+                        enterButton
+                        size="middle"
+                        onSearch={() => { console.log('test') }}
+                    /> */}
+                    {/* &nbsp; */}
+                    <Button onClick={() => navigate('/vendors/create') } type='primary' className='create-vendor-btn' icon={<UserAddOutlined />}>
+                        Add Vendor
+                    </Button>
+                </Col>
+            </Row>
+
+
+            <Table rowKey={'uuid'} columns={columns} pagination={{ position: ['bottomRight'] }} dataSource={props.vendors} />
+        </div>
     )
 }
 

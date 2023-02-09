@@ -1,3 +1,4 @@
+// @ts-nocheck
 import vendors  from "../vendors/vendors";
 import {
     expect,

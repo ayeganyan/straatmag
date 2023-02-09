@@ -32,7 +32,66 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+/* LAYOUT */
+
+.layout .logo {
+  float: left;
+  display: flex;
+}
+
+.layout .logo-text {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 0px 10px
+}
+
+.layout .logo img {
+  height: 40px;
+  margin: 10px;
+  width: auto;
+  /* float: left; */
+}
+
+
+/* Vendors */
+
+.breadcrumb-container {
+  margin: 10px 15px;
+}
+
+/* Vendors table */
+
+.vendor-list-table-container {
+  margin: 20px;
+  /* border: 1px solid lightgray; */
+  border-radius: 5px;
+}
+
+.vendor-list-table-action-panel {
+  margin: 5px 5px 10px;
+}
+
+/* .vendor-list-table-action-panel .vendor-btns-container {
+  display: flex;
+} */
+
+.vendor-list-table-action-panel .create-vendor-btn {
+  float: right;
+}
+
+/* Vendors create modal */
+
+/* .modal-title {
+  text-align: center;
+} */
+
+.vendor-form {
+  max-width: 700px;
 }

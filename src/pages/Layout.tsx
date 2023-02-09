@@ -3,11 +3,16 @@ import { Outlet } from 'react-router-dom';
 
 function AppLayout() {
     return (
-        <Layout>
-            <Header style={{ color: "white" }}>Z-Krant</Header>
+        <Layout className='layout'>
+            <Header style={{ color: "white" }}>
+                <div className='logo' >
+                    <img src='/Z_LogoAmStraatkrantRGB.png' />
+                    <div className='logo-text'> Z-Krant Admin</div>
+                </div>
+            </Header>
             <Content >
                 {/* TODO: add breadcrumbs linked to redux store */}
-                <Outlet/>
+                <Outlet />
             </Content>
         </Layout>
     )
