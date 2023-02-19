@@ -1,13 +1,14 @@
-// @ts-nocheck
 import vendors  from "../vendors/vendors";
 import {
     expect,
+    use
 } from 'chai'
 
 import {
 
 } from "firebase/firestore";
 import {resetDb} from "./resetDb";
+
 
 jest.setTimeout(60 * 1000);
 describe("Vendor test suite",  () => {
@@ -38,11 +39,16 @@ describe("Vendor test suite",  () => {
             rfid: "hello",
             email: "armen@atlassian.com"
         })
-        // expect(vendors.addVendor({
-        //     name: "Armen",
-        //     rfid: "hello",
-        //     email: "armen@atlassian.com"
-        // }))
+        await vendors.addVendor({
+            name: "Armen",
+            rfid: "hello",
+            email: "armen@atlassian.com"
+        }).then(val => {
+            throw new Error('Duplicate rfid was not detected')
+        }).catch(err => {
+            expect(err.message).to.be.equal('Vendor with rfid "hello" already exists')
+        })
+
 
     });
 })

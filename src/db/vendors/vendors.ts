@@ -29,7 +29,7 @@ async function existsByRFID(rfid: RFID) {
 async function addVendor(vendor: Vendor): Promise<Vendor> {
     const vendorId = uuidv4()
     if (await existsByRFID(vendor.rfid)) {
-        throw new Error(`Vendor with rfid ${vendor.rfid} already exists`)
+        throw new Error(`Vendor with rfid "${vendor.rfid}" already exists`)
     }
     await addDoc(
         collection(db, collections.VENDORS)
