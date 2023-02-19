@@ -27,7 +27,7 @@ if (process.env.ENVIRONMENT === 'local') {
     // Run `firebase emulators:start` for local firestore
     connectFirestoreEmulator(db, 'localhost', 8080)
 } else {
-    getAnalytics(app);
+    // getAnalytics(app);
 }
 
 export { db }

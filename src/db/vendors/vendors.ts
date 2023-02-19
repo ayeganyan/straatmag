@@ -12,12 +12,12 @@ import {
     where,
 } from "firebase/firestore";
 import { v4 as uuidv4 } from 'uuid';
-import {RFID, Vendor, VendorUUID} from "./types";
+import {Rfid, Vendor, VendorUUID} from "./types";
 
 
 const vendorsRef = collection(db, collections.VENDORS)
 
-async function existsByRFID(rfid: RFID) {
+async function existsByRFID(rfid: Rfid) {
     try {
         await getVendorByRFID(rfid)
         return true
@@ -61,8 +61,8 @@ async function getVendorById(vendorId: VendorUUID): Promise<Vendor> {
     return doc ? doc.data() : Promise.reject(`Vendor with uuid "${vendorId}" does not exist`)
 }
 
-async function getVendorByRFID(rfId: RFID): Promise<Vendor> {
-    const queryVendorById = query(vendorsRef, where("RFID", "==", rfId))
+async function getVendorByRFID(rfId: Rfid): Promise<Vendor> {
+    const queryVendorById = query(vendorsRef, where("rfid", "==", rfId))
         .withConverter(vendorConverter)
 
     const vendorsSnapshots = await getDocs(queryVendorById)
@@ -87,7 +87,7 @@ const vendorConverter: FirestoreDataConverter<Vendor> = {
         return {
             uuid: vendor.uuid,
             name: vendor.name,
-            RFID: vendor.rfid,
+            rfid: vendor.rfid,
             email: vendor.email
         } as DocumentData
     },
@@ -96,7 +96,7 @@ const vendorConverter: FirestoreDataConverter<Vendor> = {
         return {
             uuid: data.uuid,
             name: data.name,
-            rfid: data.RFID,
+            rfid: data.rfid,
             email: data.email
         } as Vendor
     }

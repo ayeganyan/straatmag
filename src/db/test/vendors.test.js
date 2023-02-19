@@ -3,11 +3,14 @@ import {
     expect,
     use
 } from 'chai'
+import chaiAsPromised from 'chai-as-promised'
 
 import {
 
 } from "firebase/firestore";
 import {resetDb} from "./resetDb";
+
+use(chaiAsPromised);
 
 
 jest.setTimeout(60 * 1000);
@@ -39,17 +42,24 @@ describe("Vendor test suite",  () => {
             rfid: "hello",
             email: "armen@atlassian.com"
         })
-        await vendors.addVendor({
+        await expect(vendors.addVendor({
             name: "Armen",
             rfid: "hello",
             email: "armen@atlassian.com"
-        }).then(val => {
-            throw new Error('Duplicate rfid was not detected')
-        }).catch(err => {
-            expect(err.message).to.be.equal('Vendor with rfid "hello" already exists')
-        })
+        })).to.eventually.be.rejectedWith(Error)
+    });
+    it('fields should not be blank', async () => {
+        await expect(vendors.addVendor({
+            name: "",
+            rfid: "hello",
+            email: "armen@atlassian.com"
+        })).to.eventually.be.rejectedWith(Error)
 
-
+        await expect(vendors.addVendor({
+            name: "hello",
+            rfid: "",
+            email: "armen@atlassian.com"
+        })).to.eventually.be.rejectedWith(Error)
     });
 })
 
