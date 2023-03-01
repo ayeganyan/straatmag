@@ -14,7 +14,7 @@ const { Title } = Typography;
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 
-function CreateVendor(props: any) {
+function VendorFormContainer(props: any) {
     const navigate = useNavigate();
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
@@ -37,18 +37,18 @@ function CreateVendor(props: any) {
         setLoading(false);
         api.info({
             message: `Notification`,
-            description: `Vendor ${formValues.name} created succesfully`,
+            description: `Vendor ${formValues.name} updated succesfully`,
             placement: 'topRight'
         });
-        navigate('/vendors')
+        // navigate('/vendors')
     }
 
     return (
         <div className="createVendor">
+            {contextHolder}
             <div>
-
                 <Spin indicator={antIcon} spinning={loading}>
-                    <CreateVendorsBlock form={form} onFormClose={onFormClose} onFormSubmit={onFormSubmit} />
+                    <CreateVendorsBlock form={form} vendorDetails={props.vendor} onFormClose={onFormClose} onFormSubmit={onFormSubmit} />
                 </Spin>
             </div>
 
@@ -56,28 +56,32 @@ function CreateVendor(props: any) {
     )
 }
 
-const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-};
 
-const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-  };
 
 function CreateVendorsBlock(props: any) {
+    const isNewVendor = !props?.vendorDetails?.uuid
+
     const validateMessages = {
         required: "'${label}' is required!",
         // ...
     }
+    const layout = {
+        labelCol: { span: 8 },
+        wrapperCol: { span: 16 },
+    };
+
+    const tailLayout = {
+        wrapperCol: { offset: 8, span: 16 },
+    };
+
     return (
         <div>
             <Form.Provider onFormFinish={(name, info) => console.log(name, info)}>
-                <br/>
-                <Form className='vendor-form' {...layout} name="control-ref" validateMessages={validateMessages} onFinish={props.onFormSubmit} form={props.form} onAbort={props.onFormClose}>
-                    <Form.Item name="title">
+                <br />
+                <Form className='vendor-form' {...layout} initialValues={props.vendorDetails} name="control-ref" validateMessages={validateMessages} onFinish={props.onFormSubmit} form={props.form} onAbort={props.onFormClose}>
+                    {/* <Form.Item name="title">
                         <Title level={4}>New Vendor</Title>
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item name="name" label="Name" rules={[{ required: true }]}>
                         <Input />
                     </Form.Item>
@@ -88,12 +92,21 @@ function CreateVendorsBlock(props: any) {
                         <Input type='email' />
                     </Form.Item>
                     <Form.Item {...tailLayout}>
-                        <Button type='default' htmlType="button" onClick={props.onFormClose}>
-                            Cancel
-                        </Button>
-                        &nbsp; &nbsp;
+                        {
+                            isNewVendor &&
+                            <div>
+                                <Button type='default' htmlType="button" onClick={props.onFormClose}>
+                                    Cancel
+                                </Button>
+                                &nbsp; &nbsp;
+                            </div>
+                        }
                         <Button type="primary" htmlType="submit">
-                            Create vendor
+                            {
+                                isNewVendor ?
+                                    'Create vendor' :
+                                    'Update vendor'
+                            }
                         </Button>
                     </Form.Item>
                 </Form>
@@ -103,4 +116,5 @@ function CreateVendorsBlock(props: any) {
     )
 }
 
-export default CreateVendor;
+let VendorForm = VendorFormContainer;
+export default VendorForm;

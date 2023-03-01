@@ -5,12 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
+  redirect,
   RouterProvider,
 } from "react-router-dom";
 import ViewVendors from './components/ViewVendors';
 import CreateVendor from './components/CreateVendorForm';
 import ErrorPage from './pages/Error';
 import AppTest from './pages/Vendors';
+import VendorForm from './components/CreateVendorForm';
 // import AppTest from './pages/Vendors';
 
 const router = createBrowserRouter([
@@ -18,16 +20,17 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     errorElement: <ErrorPage/>,
+    
     children: [
       {
         path: "vendors/*",
         element: <AppTest />,
-      },
-      {
-        path: "create",
-        element: <CreateVendor />,
-      },
+      }
     ],
+  },
+  {
+    path: "/*",
+    action: () => redirect('/'),
   }
 ]);
 const root = ReactDOM.createRoot(

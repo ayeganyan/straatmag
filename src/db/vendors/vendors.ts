@@ -87,7 +87,7 @@ const vendorConverter: FirestoreDataConverter<Vendor> = {
         return {
             uuid: vendor.uuid,
             name: vendor.name,
-            rfid: vendor.rfid,
+            RFID: vendor.rfid,
             email: vendor.email
         } as DocumentData
     },
@@ -96,7 +96,7 @@ const vendorConverter: FirestoreDataConverter<Vendor> = {
         return {
             uuid: data.uuid,
             name: data.name,
-            rfid: data.rfid,
+            rfid: data.RFID,
             email: data.email
         } as Vendor
     }

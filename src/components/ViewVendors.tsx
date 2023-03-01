@@ -42,16 +42,13 @@ function ViewVendors() {
 
                 <div >
                     {/* <Title level={3}>View Vendors</Title> */}
-                    
-                    <ViewVendorsTable 
-                    //@ts-ignore
-                    vendors={vendorList} />
+
+                    <ViewVendorsTable
+                        //@ts-ignore
+                        vendors={vendorList} />
                     {/* <button onClick={() => getAllVendor()} >test</button> */}
                 </div>
             </Spin>
-            {/* <Outlet/> */}
-
-
         </div>
     )
 }
@@ -97,18 +94,18 @@ function ViewVendorsTable(props: { vendors: readonly DataType[] | undefined; }) 
     return (
         <div className='vendor-list-table-container'>
             <Row className='vendor-list-table-action-panel'>
-                <Col span={8}/>
-                <Col span={8} />
-                <Col span={8} className='vendor-btns-container' >
-                    {/* <Search
+                <Col span={8}>
+                    <Search
                         placeholder="input search text"
                         allowClear
                         enterButton
                         size="middle"
                         onSearch={() => { console.log('test') }}
-                    /> */}
-                    {/* &nbsp; */}
-                    <Button onClick={() => navigate('/vendors/create') } type='primary' className='create-vendor-btn' icon={<UserAddOutlined />}>
+                    />
+                </Col>
+                <Col span={8} />
+                <Col span={8} className='vendor-btns-container' >
+                    <Button onClick={() => navigate('/vendors/create')} type='primary' className='create-vendor-btn' icon={<UserAddOutlined />}>
                         Add Vendor
                     </Button>
                 </Col>
