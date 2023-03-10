@@ -8,4 +8,6 @@ export type Vendor = {
     name: string // non-null
     rfid: Rfid // Unique, non-null
     email: string // optional
+
+    balance: number
 }
