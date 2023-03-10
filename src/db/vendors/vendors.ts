@@ -36,7 +36,8 @@ async function addVendor(vendor: Vendor): Promise<Vendor> {
             .withConverter<Vendor>(vendorConverter),
         {
             ...vendor,
-            uuid: vendorId
+            uuid: vendorId,
+            balance: 0
         })
 
     return await getVendorById(vendorId)

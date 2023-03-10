@@ -23,6 +23,7 @@ type Vendor = {
     name: string // non-null
     rfid: RFID // Unique, non-null
     email: string // optional
+    balance: number
 }
 
 const vendorsRef = collection(db, collections.VENDORS)
@@ -34,7 +35,8 @@ async function addVendor(vendor: Vendor): Promise<VendorUUID> {
             .withConverter<Vendor>(vendorConverter),
         {
             ...vendor,
-            uuid: vendorId
+            uuid: vendorId,
+            balance: 0
         })
     return vendorId
 }

@@ -117,7 +117,8 @@ export default {
     addRecord,
     getRecords,
     getRecordsByVendor,
-    processTransactionEntry
+    processTransactionEntry,
+    recordConverter
 }
 
 
