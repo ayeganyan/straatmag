@@ -4,7 +4,7 @@ import 'antd/dist/reset.css';
 import { Button, Col, Row, Space, Spin, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Typography } from 'antd';
-import { addVendor, getAllVendors, getVendor, Vendor } from '../db/vendor'
+import { addVendor, getAllVendors, getVendor, getVendorDocByName, Vendor } from '../db/vendor'
 import { Input } from 'antd';
 import { UserAddOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Link, Outlet, Route, Routes, useNavigate } from 'react-router-dom';
@@ -36,6 +36,16 @@ function ViewVendors() {
         let result = await getAllVendors();
         console.log(result);
     }
+
+    // let searchForVendor = async (searchTerm: string) => {
+    //     setLoading(true)
+    //     let result = await getVendorDocByName(searchTerm)
+    //     console.log(result)
+    //     //@ts-ignore
+    //     setVendorList(result)
+    //     setLoading(false)
+    // }
+
     return (
         <div className="viewVendor">
             <Spin indicator={antIcon} spinning={loading}>
@@ -45,7 +55,9 @@ function ViewVendors() {
 
                     <ViewVendorsTable
                         //@ts-ignore
-                        vendors={vendorList} />
+                        vendors={vendorList}
+                    />
+
                     {/* <button onClick={() => getAllVendor()} >test</button> */}
                 </div>
             </Spin>
@@ -68,7 +80,7 @@ const columns: ColumnsType<DataType> = [
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        render: (text, record) => <Link to={`/vendors/edit/${record.uuid}`}>{record.name} {record.lastName}</Link>,
+        render: (text, record) => <Link to={`/vendors/${record.uuid}`}>{record.name} {record.lastName}</Link>,
     },
     {
         title: 'Email',
@@ -88,7 +100,7 @@ const columns: ColumnsType<DataType> = [
 ];
 
 
-function ViewVendorsTable(props: { vendors: readonly DataType[] | undefined; }) {
+function ViewVendorsTable(props: { vendors: readonly DataType[] | undefined; searchForVendor: (searchTerm: string) => void; }) {
     const navigate = useNavigate();
 
     return (
@@ -100,7 +112,7 @@ function ViewVendorsTable(props: { vendors: readonly DataType[] | undefined; }) 
                         allowClear
                         enterButton
                         size="middle"
-                        onSearch={() => { console.log('test') }}
+                        onSearch={value => console.log(value)}
                     />
                 </Col>
                 <Col span={8} />

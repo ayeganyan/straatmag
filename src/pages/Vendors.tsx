@@ -44,7 +44,7 @@ export default function AppTest() {
     <Routes>
       <Route path="/" element={<ViewVendors />} />
       <Route path="/create" element={<VendorForm />} />
-      <Route path="/edit/:uuid" element={<ViewVendorContainer />} />
+      <Route path="/:uuid" element={<ViewVendorContainer />} />
     </Routes>
   </div>
 };

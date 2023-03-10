@@ -12,7 +12,7 @@ import {
     orderBy,
     limit,
     startAt,
-    QueryDocumentSnapshot, getDocs
+    QueryDocumentSnapshot, getDocs, Query
 } from "firebase/firestore";
 import { v4 as uuidv4 } from 'uuid';
 import {VendorUUID} from "../vendors/types";
@@ -52,7 +52,7 @@ async function getRecordsByVendor(vendorUUID: VendorUUID, page: number = 0, page
         limit(pageSize))
         .withConverter(recordConverter)
     const records = await getDocs(recordsQuery);
-    return records.docs.map(s => s.data())
+    return records.docs.map(s => s.data()).reverse( )
 }
 
 async function processTransactionEntry(formData: TransactionRecordFormValue): Promise<VendorUUID> {

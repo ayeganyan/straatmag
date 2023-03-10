@@ -56,6 +56,7 @@ const columns: ColumnsType<TransactionRecord> = [
 function Transactions(props: any) {
     const [showDrawer, setShowDrawer] = React.useState(false);
     const [transactions, setTransactions] = React.useState<TransactionRecord[]>([]);
+    const [totalDue, setTotalDue] = React.useState<number>(0);
     const [loading, setLoading] = React.useState<boolean>(false)
 
     // get the vendor's transactions
@@ -67,6 +68,13 @@ function Transactions(props: any) {
         setLoading(true)
         records.getRecordsByVendor(props.vendor.uuid).then((transactions) => {
             setTransactions(transactions)
+            // remove later, do using firebase functions
+            // calculate total due using transactions list
+            var totalDue = 0
+            transactions.forEach((transaction) => {
+                    totalDue +=  Number(transaction.amount)
+            })
+            setTotalDue(totalDue)
             setLoading(false)
         })
     }
@@ -93,7 +101,7 @@ function Transactions(props: any) {
                 <Row className="transaction-list-table-action-panel">
                     <Col span={8} className='transactions-btn-col' >
                         <Button type='default' className='' >
-                            <b>Total Due: €{props.vendor.totalDue ? props.vendor.totalDue : 0}</b>
+                            <b>Total Due: €{totalDue ? totalDue : 0}</b>
                         </Button>
                     </Col>
                     <Col span={8} />
@@ -117,6 +125,7 @@ function Transactions(props: any) {
 function NewTransaction(props: any) {
     const [form] = Form.useForm();
     const [transactionType, setTransactionType] = React.useState('BUY');
+    const [loading, setLoading] = React.useState<boolean>(false)
 
     const validateMessages = {
         required: '${label} is required!',
@@ -130,6 +139,7 @@ function NewTransaction(props: any) {
 
     // submit transaction
     const onFormFinish = () => {
+        setLoading(true)
         var transaction: TransactionRecordFormValue = {
             ...form.getFieldsValue(true),
             timestamp: new Date().getTime(),
@@ -137,6 +147,7 @@ function NewTransaction(props: any) {
         }
         props.submitTransaction(transaction)
         form.resetFields()
+        setLoading(false)
     }
 
     return (
@@ -147,6 +158,8 @@ function NewTransaction(props: any) {
             width={500}
             onClose={props.closeDrawer}
         >
+            <Spin indicator={antIcon} spinning={loading}>
+
             <Form.Provider onFormFinish={onFormFinish}>
                 <Form
                     layout="vertical"
@@ -159,7 +172,7 @@ function NewTransaction(props: any) {
                             <Radio value="BUY">Buy newspaper</Radio>
                             <Radio value="CASH_OUT">Cash out</Radio>
                             {/* <Radio value="CASH_IN">Pay for newspaper</Radio> */}
-                            {/* <Radio value="BANK_TRANSFER">Bank transfer</Radio> */}
+                            <Radio value="BANK_TRANSFER">Bank transfer</Radio>
                         </Radio.Group>
                     </Form.Item>
 
@@ -198,7 +211,7 @@ function NewTransaction(props: any) {
                     </Form.Item>
                 </Form>
             </Form.Provider>
-
+                    </Spin>
         </Drawer>
     )
 }

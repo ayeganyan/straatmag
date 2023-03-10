@@ -94,12 +94,12 @@ function CreateVendorsBlock(props: any) {
                     <Form.Item {...tailLayout}>
                         {
                             isNewVendor &&
-                            <div>
+                            <>
                                 <Button type='default' htmlType="button" onClick={props.onFormClose}>
                                     Cancel
                                 </Button>
                                 &nbsp; &nbsp;
-                            </div>
+                            </>
                         }
                         <Button type="primary" htmlType="submit">
                             {

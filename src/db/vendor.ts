@@ -80,12 +80,14 @@ async function getVendorDocByRFID(rfId: RFID): Promise<QueryDocumentSnapshot<Ven
 }
 
 // Exact match for the name is not the option, will figure it out
-async function getVendorDocByName(name: string): Promise<QueryDocumentSnapshot<Vendor> | undefined> {
+async function getVendorDocByName(name: string): Promise<Array<QueryDocumentSnapshot<Vendor>>> {
     const queryVendorById = query(vendorsRef, where("name", "==", name))
         .withConverter(vendorConverter)
 
     const vendorsSnapshot = await getDocs(queryVendorById)
-    return vendorsSnapshot.docs.at(0)
+    const docs = vendorsSnapshot.docs
+
+    return docs
 }
 
 async function getAllVendorDocs(): Promise<Array<QueryDocumentSnapshot<Vendor>>> {
@@ -120,5 +122,5 @@ const vendorConverter: FirestoreDataConverter<Vendor> = {
     }
 }
 
-export { addVendor, getVendor, getAllVendors };
+export { addVendor, getVendor, getAllVendors, getVendorDocByName };
 export type { Vendor };
