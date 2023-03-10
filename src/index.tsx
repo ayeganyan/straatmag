@@ -3,43 +3,34 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {
-  createBrowserRouter,
-  redirect,
-  RouterProvider,
-} from "react-router-dom";
-import ViewVendors from './components/ViewVendors';
-import CreateVendor from './components/CreateVendorForm';
+import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
 import ErrorPage from './pages/Error';
 import AppTest from './pages/Vendors';
-import VendorForm from './components/CreateVendorForm';
 // import AppTest from './pages/Vendors';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <App />,
-    errorElement: <ErrorPage/>,
-    
+    errorElement: <ErrorPage />,
+
     children: [
       {
-        path: "vendors/*",
+        path: 'vendors/*',
         element: <AppTest />,
-      }
+      },
     ],
   },
   {
-    path: "/*",
+    path: '/*',
     action: () => redirect('/'),
-  }
+  },
 ]);
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

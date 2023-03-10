@@ -54,7 +54,7 @@ body {
   color: white;
   font-size: 20px;
   font-weight: 600;
-  padding: 0px 10px
+  padding: 0px 10px;
 }
 
 .layout .logo img {
@@ -65,11 +65,10 @@ body {
 }
 
 .layout .ant-menu-item-selected {
-      color: #fff !important;
-    background-color: #1677ff !important;
-    border-radius: 0px !important;
+  color: #fff !important;
+  background-color: #1677ff !important;
+  border-radius: 0px !important;
 }
-
 
 /* Vendors */
 
@@ -84,11 +83,13 @@ body {
   border-radius: 5px;
 }
 
-.vendor-list-table-action-panel, .transaction-list-table-action-panel {
+.vendor-list-table-action-panel,
+.transaction-list-table-action-panel {
   margin: 10px 0px;
 }
 
-.record-transaction-btn, .refresh-transaction-btn {
+.record-transaction-btn,
+.refresh-transaction-btn {
   float: right;
 }
 
