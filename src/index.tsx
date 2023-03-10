@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
+  Navigate,
   redirect,
   RouterProvider,
 } from "react-router-dom";
@@ -19,19 +20,26 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    action: (args) => {
+      return redirect('/vendors');
+    },
     errorElement: <ErrorPage/>,
     
     children: [
+      {
+        path: "/",
+        element: <Navigate to="/vendors" replace />
+      },
       {
         path: "vendors/*",
         element: <AppTest />,
       }
     ],
   },
-  {
-    path: "/*",
-    action: () => redirect('/'),
-  }
+  // {
+  //   path: "/*",
+  //   action: () => redirect('/vendors'),
+  // }
 ]);
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

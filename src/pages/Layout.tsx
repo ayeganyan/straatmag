@@ -32,7 +32,6 @@ function AppLayout() {
 
             </Header>
             <Content >
-                {/* TODO: add breadcrumbs linked to redux store */}
                 <Outlet />
             </Content>
         </Layout>
