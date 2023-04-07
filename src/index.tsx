@@ -3,47 +3,32 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {
-  createBrowserRouter,
-  Navigate,
-  redirect,
-  RouterProvider,
-} from "react-router-dom";
-import ViewVendors from './components/ViewVendors';
-import CreateVendor from './components/CreateVendorForm';
+import { createBrowserRouter, Navigate, redirect, RouterProvider } from 'react-router-dom';
 import ErrorPage from './pages/Error';
 import AppTest from './pages/Vendors';
-import VendorForm from './components/CreateVendorForm';
-// import AppTest from './pages/Vendors';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <App />,
-    action: (args) => {
+    action: () => {
       return redirect('/vendors');
     },
-    errorElement: <ErrorPage/>,
-    
+    errorElement: <ErrorPage />,
+
     children: [
       {
-        path: "/",
-        element: <Navigate to="/vendors" replace />
+        path: '/',
+        element: <Navigate to='/vendors' replace />,
       },
       {
-        path: "vendors/*",
+        path: 'vendors/*',
         element: <AppTest />,
-      }
+      },
     ],
   },
-  // {
-  //   path: "/*",
-  //   action: () => redirect('/vendors'),
-  // }
 ]);
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />

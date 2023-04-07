@@ -3,6 +3,7 @@ module.exports = {
   env: {
     es6: true,
     node: true,
+    jest: true,
   },
   extends: [
     'eslint:recommended',
@@ -23,20 +24,20 @@ module.exports = {
   plugins: ['@typescript-eslint', 'import'],
   rules: {
     'object-curly-spacing': ['warn', 'always'],
-    quotes: ['error', 'single'],
+    'quotes': ['error', 'single'],
     'import/no-unresolved': 0,
-    'require-jsdoc': "off",
-    "@typescript-eslint/ban-ts-comment": "off",
-    "max-len": [
-      "error",
+    'require-jsdoc': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
+    'max-len': [
+      'error',
       {
-        "code": 120,
-        "tabWidth": 2,
-        "ignoreComments": true, //"comments": 80
-        "ignoreUrls": true,
-        "ignoreStrings": true,
-        "ignoreTemplateLiterals": true
-      }
-    ]
+        code: 120,
+        ignoreComments: true, // "comments": 80
+        ignoreUrls: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+      },
+    ],
+    'indent': ['error', 2],
   },
 };

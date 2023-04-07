@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore, connectFirestoreEmulator, initializeFirestore } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -8,13 +8,13 @@ import { getFirestore, connectFirestoreEmulator, initializeFirestore } from "fir
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyANNoPumk8aYCvOde4P8El33EXsv5_HhlQ",
-    authDomain: "straatmag-9b162.firebaseapp.com",
-    projectId: "straatmag-9b162",
-    storageBucket: "straatmag-9b162.appspot.com",
-    messagingSenderId: "241081520448",
-    appId: "1:241081520448:web:6fe1299dee3923c401eaa5",
-    measurementId: "G-0MQMBK2VSE"
+  apiKey: 'AIzaSyANNoPumk8aYCvOde4P8El33EXsv5_HhlQ',
+  authDomain: 'straatmag-9b162.firebaseapp.com',
+  projectId: 'straatmag-9b162',
+  storageBucket: 'straatmag-9b162.appspot.com',
+  messagingSenderId: '241081520448',
+  appId: '1:241081520448:web:6fe1299dee3923c401eaa5',
+  measurementId: 'G-0MQMBK2VSE',
 };
 
 // Initialize Firebase
@@ -22,10 +22,10 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 if (process.env.ENVIRONMENT === 'local') {
-    // Run `firebase emulators:start` for local firestore
-    connectFirestoreEmulator(db, 'localhost', 8080)
+  // Run `firebase emulators:start` for local firestore
+  connectFirestoreEmulator(db, 'localhost', 8080);
 } else {
-    // getAnalytics(app);
+  // getAnalytics(app);
 }
 
-export { db }
+export { db };

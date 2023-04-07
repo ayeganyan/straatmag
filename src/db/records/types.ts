@@ -1,7 +1,4 @@
-import {VendorUUID} from "../vendors/types";
-
-
-
+import { VendorUUID } from '../vendors/types';
 
 /**
  * Scenarios:
@@ -15,31 +12,31 @@ import {VendorUUID} from "../vendors/types";
  *      - { amount: -2 }
  */
 
-export type RecordUUID = string
+export type RecordUUID = string;
 
 export enum RecordType {
-    BUY = 'BUY',
-    CASH_IN = 'CASH_IN',
-    BANK_TRANSFER = 'BANK_TRANSFER',
-    CASH_OUT = 'CASH_OUT',
+  BUY = 'BUY',
+  CASH_IN = 'CASH_IN',
+  BANK_TRANSFER = 'BANK_TRANSFER',
+  CASH_OUT = 'CASH_OUT',
 }
 
 export type BuyDetails = {
-    count: number
-    productId: number
-}
+  count: number;
+  productId: number;
+};
 
 export type TransactionRecord = {
-    uuid?: RecordUUID
-    timestamp: string
-    type: RecordType
-    amount: number
-    vendorUUID: VendorUUID
-    details?: BuyDetails,
-    comment?: string
-}
+  uuid?: RecordUUID;
+  timestamp: string;
+  type: RecordType;
+  amount: number;
+  vendorUUID: VendorUUID;
+  details?: BuyDetails;
+  comment?: string;
+};
 
 export type TransactionRecordFormValue = TransactionRecord & {
-    amountSecondary?: number;
-    count?: number;
-}
+  amountSecondary?: number;
+  count?: number;
+};
