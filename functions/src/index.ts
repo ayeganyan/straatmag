@@ -3,6 +3,11 @@ import { TransactionRecord } from '../../src/db/records/types';
 import records from '../../src/db/records/records';
 import vendors from '../../src/db/vendors/vendors';
 import collections from '../../src/db/collections';
+import adyenWebhookHandler from './adyen/adyenWebhookHandler';
+// import * as admin from 'firebase-admin';
+//
+// admin.initializeApp();
+
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -17,6 +22,7 @@ functions.firestore.document(`${collections.RECORDS}/{recordId}`)
     const vendor = await vendors.getVendorById(vendorUUID);
     vendor.balance = vendor.balance + amount;
 
-    vendors.updateVendor(vendorUUID, vendor);
+    await vendors.updateVendor(vendorUUID, vendor);
   });
 
+exports.adyen = functions.https.onRequest(adyenWebhookHandler);

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { db } from '../../firebase';
 import collections from '../collections';
 import {
@@ -15,21 +14,21 @@ import {
 } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { VendorUUID } from '../vendors/types';
-import { RecordType, TransactionRecord } from './types';
+import { RecordType, TransactionRecord, TransactionRecordFormValue } from './types';
 
 const recordsRef = collection(db, collections.RECORDS);
 
-async function addRecord(record: Record): Promise<VendorUUID> {
+async function addRecord(record: TransactionRecord): Promise<VendorUUID> {
   const recordId = uuidv4();
   console.log(record);
-  await addDoc(collection(db, collections.RECORDS).withConverter<Record>(recordConverter), {
+  await addDoc(collection(db, collections.RECORDS).withConverter<TransactionRecord>(recordConverter), {
     ...record,
     uuid: recordId,
   });
   return recordId;
 }
 
-async function getRecords(page: number, pageSize: number): Promise<Record[]> {
+async function getRecords(page: number, pageSize: number): Promise<TransactionRecord[]> {
   const recordsQuery = query(
     recordsRef,
     orderBy('timestamp'),
@@ -40,7 +39,7 @@ async function getRecords(page: number, pageSize: number): Promise<Record[]> {
   return records.docs.map((s) => s.data());
 }
 
-async function getRecordsByVendor(vendorUUID: VendorUUID, page = 0, pageSize = 100): Promise<Record[]> {
+async function getRecordsByVendor(vendorUUID: VendorUUID, page = 0, pageSize = 100): Promise<TransactionRecord[]> {
   const recordsQuery = query(
     recordsRef,
     where('vendorUUID', '==', vendorUUID),
@@ -52,32 +51,32 @@ async function getRecordsByVendor(vendorUUID: VendorUUID, page = 0, pageSize = 1
   return records.docs.map((s) => s.data()).reverse();
 }
 
-async function processTransactionEntry(formData: TransactionRecordFormValue): Promise<VendorUUID> {
+async function processTransactionEntry(formData: TransactionRecordFormValue): Promise<void> {
   console.log(formData);
-  const record: Record = {
+  const record: TransactionRecord = {
     uuid: uuidv4(),
     timestamp: formData.timestamp,
     type: formData.type,
     amount: [RecordType.BUY, RecordType.CASH_OUT].includes(formData.type) ? -formData.amount : formData.amount,
     vendorUUID: formData.vendorUUID,
-    comment: formData.comment || null,
+    comment: formData.comment,
   };
   if (RecordType.BUY === formData.type) {
     record.details = {
-      count: +formData.count,
+      count: formData.count ? +formData.count : 0,
       productId: 'newspaper',
     };
   }
   await addRecord(record);
 
   if (RecordType.BUY === formData.type) {
-    const secondRecord: Record = {
+    const secondRecord: TransactionRecord = {
       uuid: uuidv4(),
       timestamp: formData.timestamp,
       type: RecordType.CASH_IN,
-      amount: +formData.amountSecondary,
+      amount: formData.amountSecondary ? +formData.amountSecondary : 0,
       vendorUUID: formData.vendorUUID,
-      comment: formData.comment || null,
+      comment: formData.comment,
     };
     await addRecord(secondRecord);
   }
@@ -96,7 +95,7 @@ const recordConverter: FirestoreDataConverter<TransactionRecord> = {
       comment: record.comment || null,
     };
   },
-  fromFirestore(snapshot): Record {
+  fromFirestore(snapshot): TransactionRecord {
     const data = snapshot.data();
     return {
       uuid: data.uuid,

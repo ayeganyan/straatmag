@@ -52,6 +52,7 @@
     }
   },
   "devDependencies": {
+    "@adyen/api-library": "^13.1.1",
     "@types/chai": "^4.3.4",
     "@types/node-fetch": "^2.6.2",
     "@types/uuid": "^9.0.0",

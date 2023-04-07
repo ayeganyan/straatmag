@@ -23,7 +23,7 @@ export enum RecordType {
 
 export type BuyDetails = {
   count: number;
-  productId: number;
+  productId: string;
 };
 
 export type TransactionRecord = {
