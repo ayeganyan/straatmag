@@ -9,7 +9,7 @@ import adyenEvents from '../../../src/db/adyenEvents/adyenEvents';
 
 admin.initializeApp();
 
-const adyenWebhookHandler = async (req: Request, res: Response) => {
+const adyenWebhookHandler = async (req: Request, res: Response): Promise<void> => {
   console.log('Adyen webhook received: ', JSON.stringify(req.body));
   try {
     // Get the request body

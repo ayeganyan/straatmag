@@ -1,19 +1,18 @@
 import { db } from '../../firebase';
 import collections from '../collections';
-import { addDoc, collection, doc, FirestoreDataConverter, getDoc } from 'firebase/firestore';
+import { doc, FirestoreDataConverter, getDoc, runTransaction } from 'firebase/firestore';
 import { PaymentEventData } from './types';
 
-const eventsRef = collection(db, collections.ADYEN_EVENTS);
-
 const saveEvents = async (paymentDatas: PaymentEventData[]) => {
-  const savedJobs = paymentDatas.map(async (paymentData) => {
-    const docRef = doc(db, collections.ADYEN_EVENTS, paymentData.pspReference);
-    const event = await getDoc(docRef);
-    if (!event.exists()) {
-      addDoc(eventsRef.withConverter(eventConverter), paymentData);
+  await runTransaction(db, async (transaction) => {
+    for (const paymentData of paymentDatas) {
+      const docRef = doc(db, collections.ADYEN_EVENTS, paymentData.pspReference);
+      const event = await getDoc(docRef);
+      if (!event.exists()) {
+        transaction.set(docRef, eventConverter.toFirestore(paymentData));
+      }
     }
   });
-  await Promise.all(savedJobs);
 };
 
 const eventConverter: FirestoreDataConverter<PaymentEventData> = {
