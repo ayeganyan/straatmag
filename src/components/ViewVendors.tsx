@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react';
 import 'antd/dist/reset.css';
 import { Button, Col, Input, Row, Spin, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { getAllVendors, Vendor } from '../db/vendor';
+import vendors from '../db/vendors/vendors';
 import { LoadingOutlined, UserAddOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
+import { Vendor } from '../db/vendors/types';
 
 const { Search } = Input;
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -17,7 +18,7 @@ function ViewVendors() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const allVendors = await getAllVendors();
+      const allVendors = await vendors.getAllVendors();
       setVendorList(allVendors);
       setLoading(false);
       console.log('load complete');
@@ -26,7 +27,7 @@ function ViewVendors() {
 
   // @ts-ignore
   const getAllVendor = async () => {
-    const result = await getAllVendors();
+    const result = await vendors.getAllVendors();
     console.log(result);
   };
 

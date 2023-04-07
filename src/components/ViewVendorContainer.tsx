@@ -3,10 +3,10 @@ import 'antd/dist/reset.css';
 import { Skeleton, Tabs, TabsProps } from 'antd';
 import { redirect, useParams } from 'react-router-dom';
 
-import { Vendor } from '../db/vendor';
 import vendors from '../db/vendors/vendors';
 import VendorForm from './CreateVendorForm';
 import Transactions from './Transactions';
+import { Vendor } from '../db/vendors/types';
 
 function ViewVendorContainer() {
   const { uuid } = useParams();

@@ -78,6 +78,14 @@ async function getVendorByName(name: string): Promise<Vendor> {
     Promise.reject(new Error(`Vendor with name "${name}' does not exist`));
 }
 
+async function getAllVendors(): Promise<Array<Vendor>> {
+  const queryVendorById = query(vendorsRef).withConverter(vendorConverter);
+
+  const vendorsSnapshot = await getDocs(queryVendorById);
+  const vendorDocs = vendorsSnapshot.docs;
+  return vendorDocs.map((doc) => doc.data());
+}
+
 // converters
 
 const vendorConverter: FirestoreDataConverter<Vendor> = {
@@ -106,6 +114,7 @@ const vendors = {
   getVendorByName,
   getVendorByRFID,
   updateVendor,
+  getAllVendors,
 };
 
 export default vendors;

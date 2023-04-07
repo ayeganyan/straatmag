@@ -5,7 +5,8 @@ import { Button, Form, Input, notification, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { LoadingOutlined } from '@ant-design/icons';
 
-import { addVendor } from '../db/vendor';
+import vendors from '../db/vendors/vendors';
+import { Vendor } from '../db/vendors/types';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -25,7 +26,7 @@ function VendorFormContainer(props: any) {
     setLoading(true);
     console.log(form.getFieldsValue(true));
     const formValues = form.getFieldsValue(true);
-    const result = await addVendor(formValues);
+    const result = await vendors.addVendor(formValues as Vendor);
     console.log(result);
     setLoading(false);
     api.info({
