@@ -1,4 +1,3 @@
-import * as admin from 'firebase-admin';
 // import * as crypto from 'crypto';
 import { Request, Response } from 'express';
 import { NotificationItem } from '@adyen/api-library/lib/src/typings/notification/notificationItem';
@@ -6,8 +5,6 @@ import { NotificationResponse } from '@adyen/api-library/lib/src/typings/platfor
 import { Notification } from '@adyen/api-library/lib/src/typings/notification/notification';
 import { PaymentEventData, Status } from '../../../src/db/adyenEvents/types';
 import adyenEvents from '../../../src/db/adyenEvents/adyenEvents';
-
-admin.initializeApp();
 
 const adyenWebhookHandler = async (req: Request, res: Response): Promise<void> => {
   console.log('Adyen webhook received: ', JSON.stringify(req.body));

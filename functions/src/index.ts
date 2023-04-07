@@ -4,13 +4,9 @@ import records from '../../src/db/records/records';
 import vendors from '../../src/db/vendors/vendors';
 import collections from '../../src/db/collections';
 import adyenWebhookHandler from './adyen/adyenWebhookHandler';
-// import * as admin from 'firebase-admin';
-//
-// admin.initializeApp();
+import * as admin from 'firebase-admin';
 
-
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+admin.initializeApp();
 
 functions.firestore.document(`${collections.RECORDS}/{recordId}`)
   .onCreate(async (snap, context) => {
