@@ -3,4 +3,4 @@
 cd functions
 
 npm ci
-npm run build
+CI=false npm run build
